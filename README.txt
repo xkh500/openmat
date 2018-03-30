@@ -6,6 +6,8 @@ This directory contains the following folders:
 - LpmsControl: An application to control and use LPMS devices.
 - LpemgControl: An application to control and use LPEMMG devices.
 - LpSensorCWrapper: C language wrapper for LpSensor
+- LpSensorForAndroid: LpSensor library for Android (experimental!)
+- LpSensorForIOS: LpSensor library for Android (experimental!)
 
 For more information visit our website www.lp-research.com or contact info@lp-research.com.
 
@@ -20,3 +22,6 @@ Toolbar Icons: P.J. Onori (http://www.somerandomdude.com/work/iconic/)
 Eigen: INRIA / Tux Family (http://eigen.tuxfamily.org/index.php?title=Main_Page)
 
 Thank you for your great contributions!
+
+Copyright (C) 2018 LP-RESEARCH Inc.
+All rights reserved
