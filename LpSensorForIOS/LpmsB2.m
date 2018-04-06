@@ -1,4 +1,4 @@
-﻿/***********************************************************************
+/***********************************************************************
 ** Copyright (C) 2018 LP-RESEARCH Inc.
 ** All rights reserved
 ** Contact: info@lp-research.com
@@ -38,17 +38,16 @@
 
 #import <CoreBluetooth/CoreBluetooth.h>
 
-#define kServiceUUID @"0000180F-0000-1000-8000-00805F9B34FB" //服务的UUID
-#define kCharacteristicUUID @"00002A19-0000-1000-8000-00805F9B34FB" //特征的UUID
+#define kServiceUUID @"0000180F-0000-1000-8000-00805F9B34FB"
+#define kCharacteristicUUID @"00002A19-0000-1000-8000-00805F9B34FB"
 
 @interface LpmsB2 ()<CBCentralManagerDelegate,CBPeripheralDelegate>
 
-@property (strong,nonatomic) CBCentralManager *centralManager;//中心设备管理器
-@property (strong,nonatomic) NSMutableArray *peripherals;//连接的外围设备
+@property (strong,nonatomic) CBCentralManager *centralManager;
+@property (strong,nonatomic) NSMutableArray *peripherals;
 
 @end
 
-// Stream frequency enable bits
 const static int LPMS_STREAM_FREQ_5HZ = 5;
 const static int LPMS_STREAM_FREQ_10HZ = 10;
 const static int LPMS_STREAM_FREQ_25HZ = 25;
@@ -62,40 +61,34 @@ const static int LPMS_FILTER_GYR_ACC_MAG = 2;
 const static int LPMS_FILTER_MADGWICK_GYR_ACC = 3;
 const static int LPMS_FILTER_MADGWICK_GYR_ACC_MAG = 4;
 
-// Gyro Range
 const static int LPMS_GYR_RANGE_125DPS  = 125;
 const static int LPMS_GYR_RANGE_245DPS  = 245;
 const static int LPMS_GYR_RANGE_500DPS  = 500;
 const static int LPMS_GYR_RANGE_1000DPS  = 1000;
 const static int LPMS_GYR_RANGE_2000DPS  = 2000;
 
-// Acc Range
 const static int LPMS_ACC_RANGE_2G = 2;
 const static int LPMS_ACC_RANGE_4G = 4;
 const static int LPMS_ACC_RANGE_8G = 8;
 const static int LPMS_ACC_RANGE_16G = 16;
 
-// Mag Range
 const static int LPMS_MAG_RANGE_4GAUSS = 4;
 const static int LPMS_MAG_RANGE_8GAUSS = 8;
 const static int LPMS_MAG_RANGE_12GAUSS =12;
 const static int LPMS_MAG_RANGE_16GAUSS =16;
 
-// 10是以毫秒为单位，这里是秒
 const static int PARAMETER_SET_DELAY =0.05f;
 
-// Connection status
 const static int SENSOR_STATUS_CONNECTED = 1;
 const static int SENSOR_STATUS_CONNECTING = 2;
 const static int SENSOR_STATUS_DISCONNECTED = 3;
 
-// Offset mode
 const static int  LPMS_OFFSET_MODE_OBJECT = 0;
 const static int  LPMS_OFFSET_MODE_HEADING = 1;
 const static int  LPMS_OFFSET_MODE_ALIGNMENT = 2;
 
 NSString *TAG = @"LpmsB2";
-NSUUID *MY_UUID_INSECURE ; // = UUID.fromString(@"00001101-0000-1000-8000-00805F9B34FB");
+NSUUID *MY_UUID_INSECURE; // = UUID.fromString(@"00001101-0000-1000-8000-00805F9B34FB");
 
 const int PACKET_ADDRESS0 	= 0;
 const int PACKET_ADDRESS1 	= 1;
@@ -109,9 +102,7 @@ const int PACKET_LRC_CHECK1 = 8;
 const int PACKET_END 		= 9;
 const int PACKET_TEST       = 10;
 int rxState = PACKET_TEST;
-// int rxState = PACKET_END;
 
-// Command Registers
 const int REPLY_ACK 			= 0;
 const int REPLY_NACK 			= 1;
 const int UPDATE_FIRMWARE 		= 2;
@@ -124,27 +115,22 @@ const int GET_SENSOR_DATA 		= 9;
 const int SET_TRANSMIT_DATA 	= 10;
 const int SET_STREAM_FREQ 		= 11;
 
-// Register value save and reset
 int WRITE_REGISTERS    	    = 15;
 int RESTORE_FACTORY_VALUE   = 16;
 
-// Reference setting and offset reset
 int RESET_REFERENCE  	        = 17;
 int SET_ORIENTATION_OFFSET      = 18;
 int RESET_ORIENTATION_OFFSET    = 82;
 
-// IMU ID setting
 int SET_IMU_ID 		    	= 20;
 const int GET_IMU_ID        = 21;
 
-// Gyroscope settings
 int START_GYR_CALIBRA 	    = 22;
 int ENABLE_GYR_AUTOCAL   	= 23;
 int ENABLE_GYR_THRES 		= 24;
 int SET_GYR_RANGE    		= 25;
 const int GET_GYR_RANGE     = 26;
 
-// Accelerometer settings
 int SET_ACC_BIAS     		= 27;
 int GET_ACC_BIAS     		= 28;
 int SET_ACC_ALIGN_MATRIX 	= 29;
@@ -156,7 +142,6 @@ int GET_GYR_ALIGN_BIAS   	= 49;
 int SET_GYR_ALIGN_MATRIX 	= 50;
 int GET_GYR_ALIGN_MATRIX 	= 51;
 
-// Magnetometer settings
 int SET_MAG_RANGE    		    = 33;
 const int GET_MAG_RANGE    		= 34;
 int SET_HARD_IRON_OFFSET 	    = 35;
@@ -172,7 +157,6 @@ int GET_MAG_ALIGNMENT_MATRIX    = 79;
 int GET_MAG_ALIGNMENT_BIAS      = 80;
 int GET_MAG_REFERENCE		    = 81;
 
-// Filter settings
 int SET_FILTER_MODE  		    = 41;
 const int GET_FILTER_MODE  		= 42;
 int SET_FILTER_PRESET		    = 43;
@@ -180,7 +164,6 @@ int GET_FILTER_PRESET		    = 44;
 int SET_LIN_ACC_COMP_MODE	    = 67;
 int GET_LIN_ACC_COMP_MODE	    = 68;
 
-// Status register contents
 int SET_CENTRI_COMP_MODE 	    = 69;
 int GET_CENTRI_COMP_MODE 	    = 70;
 int SET_RAW_DATA_LP  		    = 60;
@@ -199,7 +182,6 @@ const int STOP_SYNC             = 97;
 const int GET_PING              = 98;
 const int GET_TEMPERATURE       = 99;
 
-// Configuration register contents
 const static int LPMS_GYR_AUTOCAL_ENABLED               = 0x00000001 << 30;
 const static int LPMS_LPBUS_DATA_MODE_16BIT_ENABLED     = 0x00000001 << 22;
 const static int LPMS_LINACC_OUTPUT_ENABLED             = 0x00000001 << 21;
@@ -228,14 +210,14 @@ int LPMS_STREAM_FREQ_MASK             = 0x00000007;
 int MAX_BUFFER = 512;
 int DATA_QUEUE_SIZE = 64;
 
-// Status
 int connectionStatus = SENSOR_STATUS_DISCONNECTED;
 
-// Protocol parsing related
-Byte rxBuffer[512];
-Byte rawTxData[512];
-Byte txBuffer[512];
-Byte rawRxBuffer[512];
+const static int MAX_RXTX_BUFFER = 512;
+
+Byte rxBuffer[MAX_RXTX_BUFFER];
+Byte rawTxData[MAX_RXTX_BUFFER];
+Byte txBuffer[MAX_RXTX_BUFFER];
+Byte rawRxBuffer[MAX_RXTX_BUFFER];
 int currentAddress = 0;
 int currentFunction = 0;
 int currentLength = 0;
@@ -247,7 +229,6 @@ BOOL waitForAck = false;
 BOOL waitForData = false;
 Byte inBytes[2];
 
-// Settings related
 int imuId = 0;
 int gyrRange = 0;
 int accRange = 0;
@@ -292,157 +273,139 @@ float mT;
 int vmajor,vminor,vbuild;
 NSString *mAddress;
 
-// Test
 NSMutableArray *tableArray;
 BOOL Connect = false;
 float data;
 BOOL a = true;
 BOOL a16 = true;
 
-// 丢包
-float lose=0;
+float lose = 0;
 float dt;
 float MaxDt;
 BOOL Check = false;
 
-// 全局变量
 CBPeripheral *p;
 CBCharacteristic *chara;
 dispatch_queue_t queue;
 
+BOOL printData = true;
+
 @implementation LpmsB2 {
-    // 部分使用成员变量
 }
 
-// If true, the sensor will be at command mode. And after that, you should
-// use setAcquisitionParameters() to set some sensor param.
 -(BOOL)connect:(CBCentralManager*)central Address:(CBPeripheral*)address {
-    _centralManager=[[CBCentralManager alloc]initWithDelegate:self queue:nil];
+    _centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:nil];
     _centralManager = central;
     _centralManager.delegate = self;
 
-    if (connectionStatus != SENSOR_STATUS_DISCONNECTED) {
+    /* if (connectionStatus != SENSOR_STATUS_DISCONNECTED) {
         return false;
     }
     
     if (_centralManager == nil) {
         connectionStatus = SENSOR_STATUS_DISCONNECTED;
         return false;
-    }
+    } */
 
     p = address;
 
     [_centralManager stopScan];
     [self.centralManager connectPeripheral:p options:@{CBConnectPeripheralOptionNotifyOnConnectionKey:@YES}];
     
+    NSLog(@"Connecting to sensor %@", p);
+    
     return true;
 }
 
-// 数据解析后再运行这里
--(void)SetParameters{
-    // NSLog(@" SetParameters    %@", [NSThread mainThread]);
+-(void)SetParameters {
     [self setCommandMode];
-
-    if (waitForAck == false) {
-        // bug, 死循环
-        while (waitForAck && readCharacteristicReady) {
-            [self setCommandMode];
-            @try {
-                [NSThread sleepForTimeInterval:1L];
-            }
-            @catch (NSException *exception) {
-                NSLog(@"SetParameters error: %@",exception);
-            }
-        }
-    }
-
+    
+    [self enableGyroData: false];
+    [self enableAccData: false];
+    [self enableMagData: false];
+    [self enableAngularVelData: false];
+    [self enableQuaternionData: true];
+    [self enableEulerData: false];
+    [self enableLinAccData: false];
+    [self enableAltitudeData: false];
+    [self enablePressureData: false];
+    [self enableTemperatureData: false];
+    [self enableHeaveData: false];
+    
     [self _getBatteryPercentage];
     [self _getBatteryVoltage];
     [self _getSensorSettings];
+    
     [self setStreamingMode];
+    
     connectionStatus = SENSOR_STATUS_CONNECTED;
+    
+    [self setStreamingMode];
 }
 
-
-// 连接到外围设备
 -(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)
 peripheral{
-    // NSLog(@"B2 连接外围设备成功!");
-    // 设置外围设备的代理为当前视图控制器
-    peripheral.delegate=self;
-    
-    // 外围设备开始寻找服务
+    peripheral.delegate = self;
     [peripheral discoverServices:@[[CBUUID UUIDWithString:kServiceUUID]]];
     
-    // NSLog(@"what :,%@",peripheral);
+    NSLog(@"Connected to peripherial %@", peripheral);
 }
 
-// 连接外围设备失败
 -(void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)
 peripheral error:(NSError *)error {
-    NSLog(@"B2 连接外围设备失败!");
+    NSLog(@"Failed to connect to peripherial %@", peripheral);
+    
     connectionStatus = SENSOR_STATUS_DISCONNECTED;
 }
 
-#pragma mark - CBPeripheral 代理方法
-// 外围设备寻找到服务后
 -(void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error{
-    // NSLog(@"B2 已发现可用服务...");
-    // [self writeToLog:@"已发现可用服务..."];
     if (error) {
         connectionStatus = SENSOR_STATUS_DISCONNECTED;
-        NSLog(@"外围设备寻找服务过程中发生错误，错误信息：%@",error.localizedDescription);
+        NSLog(@"Service discovery error：%@", error.localizedDescription);
         
         return;
     }
 
-    // 遍历查找到的服务
-    CBUUID *serviceUUID=[CBUUID UUIDWithString:kServiceUUID];
-    CBUUID *characteristicUUID=[CBUUID UUIDWithString:kCharacteristicUUID];
+    CBUUID *serviceUUID = [CBUUID UUIDWithString:kServiceUUID];
+    CBUUID *characteristicUUID = [CBUUID UUIDWithString:kCharacteristicUUID];
 
-    // NSLog(@"peripheral %@",peripheral.services);
-    // NSLog(@"CBservice %@",service);
     for (CBService *service in peripheral.services) {
         if ([service.UUID isEqual:serviceUUID]) {
-            // 外围设备查找指定服务中的特征,监听
             [peripheral discoverCharacteristics:@[characteristicUUID] forService:service];
         }
     }
 }
 
-// 外围设备寻找到特征后
 -(void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)
 service error:(NSError *)error {
-    // NSLog(@"B2 已发现可用特征...");
-    // [self writeToLog:@"已发现可用特征..."];
     if (error) {
         connectionStatus = SENSOR_STATUS_DISCONNECTED;
-        NSLog(@"外围设备寻找特征过程中发生错误，错误信息：%@",error.localizedDescription);
+        NSLog(@"Error in characteristics discovery：%@",error.localizedDescription);
+        
         return;
     }
 
-    // 遍历服务中的特征
-    CBUUID *serviceUUID=[CBUUID UUIDWithString:kServiceUUID];
-    CBUUID *characteristicUUID=[CBUUID UUIDWithString:kCharacteristicUUID];
+    CBUUID *serviceUUID = [CBUUID UUIDWithString:kServiceUUID];
+    CBUUID *characteristicUUID = [CBUUID UUIDWithString:kCharacteristicUUID];
+    
     if ([service.UUID isEqual:serviceUUID]) {
-        // 遍历出所需要的特征
         for (CBCharacteristic *characteristic in service.characteristics) {
             if ([characteristic.UUID isEqual:characteristicUUID]) {
-                // 特征值属性
-                // NSLog(@"characteristic :%@",characteristic);
-                // 订阅通知
+                
                 [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+                
                 p = peripheral;
                 chara = characteristic;
                 connectionStatus = SENSOR_STATUS_CONNECTING;
-                // NSLog(@" 主线程    %@",[NSThread mainThread]);
-                // 线程优先级
-                // queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
-                // 异步
+                
                 queue = dispatch_queue_create("GCD", DISPATCH_QUEUE_SERIAL);
+                
+                NSLog(@"Found LPMS-B2 characteristic. About to set parameters.");
+                
                 dispatch_async(queue, ^{
                     [self SetParameters];
                 });
+                
                 mLpmsBData = [[LpmsBData alloc]init];
                 tableArray = [[NSMutableArray alloc]initWithCapacity:0];
                 dl = [[DataLogger alloc]init];
@@ -451,88 +414,67 @@ service error:(NSError *)error {
     }
 }
 
-// 特征值被更新后
 -(void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:
-(CBCharacteristic *)characteristic error:(NSError *)error{
-    
+(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
         connectionStatus = SENSOR_STATUS_DISCONNECTED;
-        NSLog(@"更新通知状态时发生错误，错误信息：%@",error.localizedDescription);
+        NSLog(@"Characteristic notification state update error：%@", error.localizedDescription);
     }
-    // 给特征值设置新的值
+    
     CBUUID *characteristicUUID=[CBUUID UUIDWithString:kCharacteristicUUID];
     if ([characteristic.UUID isEqual:characteristicUUID]) {
         if (characteristic.isNotifying) {
             if (characteristic.properties == CBCharacteristicPropertyNotify) {
-                NSLog(@"已订阅特征通知.");
                 return;
             } else if (characteristic.properties == CBCharacteristicPropertyRead) {
-                // 从外围设备读取新值,调用此方法会触发代理方法：
-                // -(void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
                 [peripheral readValueForCharacteristic:characteristic];
             }
         } else {
-            NSLog(@"停止已停止.");
-            
-            // 取消连接
             [self.centralManager cancelPeripheralConnection:peripheral];
         }
-        // NSLog(@"why");
+
         readCharacteristicReady = true;
-        NSLog(@"B2 收到特征更新通知...");
+        NSLog(@"LPMS-B2 read characteristic ready.");
     }
 }
 
-// 更新特征值后（调用readValueForCharacteristic:方法或者外围设备在订阅后更新特征值都会调用此代理方法）
-// 读取数据
--(void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic
-                                                                              *)characteristic error:(NSError *)error{
-    // NSLog(@"didUpdateValueForCharacteristic");
+-(void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic*)characteristic error:(NSError *)error {
     if (error) {
         connectionStatus = SENSOR_STATUS_DISCONNECTED;
-        NSLog(@"更新特征值时发生错误，错误信息：%@",error.localizedDescription);
+        
+        NSLog(@"Value update error: %@", error.localizedDescription);
+        
         return;
     }
 
-    // 数据显示
     if (characteristic.value) {
         [self parse:characteristic.value];
-        
-        // NSLog(@"characteristic : %@",characteristic.value);
     } else {
-        NSLog(@"未发现特征值.");        
     }
-
 }
 
--(BOOL)disconnect{
+-(BOOL)disconnect {
     BOOL res = false;
 
-    if (connectionStatus != SENSOR_STATUS_DISCONNECTED)
-        res = true;
+    if (connectionStatus != SENSOR_STATUS_DISCONNECTED) res = true;
     
     connectionStatus = SENSOR_STATUS_DISCONNECTED;
 
     return res;    
 }
 
-// 设置命令模式
 -(void)setCommandMode {
-    if ([self assertConnected]) {
-        waitForAck = true;
+    if (![self assertConnected]) return;
+    
+    waitForAck = true;
 
-        [self lpbusSetNone:GOTO_COMMAND_MODE];
-        [self _waitForAckLoop];
-    }
+    [self lpbusSetNone:GOTO_COMMAND_MODE];
+    [self _waitForAckLoop];
 }
 
-// change sensor to Streaming mode.
-// it will send data too much ,and you have better to
-// change sensor mode to set sensor or get some data you need.
 -(void)setStreamingMode {
-    if (![self assertConnected]) {
-        return;
-    }
+    if (![self assertConnected]) return;
+    // if (isStreamMode == true) return;
 
     waitForAck = true;
 
@@ -543,9 +485,7 @@ service error:(NSError *)error {
 }
 
 -(void)setImuId:(int)id {
-    if (![self assertConnected]) {
-        return;
-    }
+    if (![self assertConnected]) return;
 
     NSThread *nt = [[NSThread alloc] initWithTarget:self selector:@selector(setImuIdRun:) object:nil];
 
@@ -563,9 +503,7 @@ service error:(NSError *)error {
     [self _getSensorSettings];
     [self _saveParameters];
     
-    if (b) {
-        [self setStreamingMode];
-    }
+    if (b) [self setStreamingMode];
 }
 
 -(int)getImuId {    
@@ -577,10 +515,7 @@ service error:(NSError *)error {
 }
 
 -(void)setGyroRange:(int)range {
-
-    if (![self assertConnected]){
-        return;
-    }
+    if (![self assertConnected]) return;
 
     if (range == LPMS_GYR_RANGE_125DPS ||
         range == LPMS_GYR_RANGE_245DPS ||
@@ -599,9 +534,7 @@ service error:(NSError *)error {
             [self _getSensorSettings];
             [self _saveParameters];
 
-            if (b) {
-                [self setStreamingMode];
-            }
+            if (b) [self setStreamingMode];
         });
     }
 }
@@ -610,11 +543,8 @@ service error:(NSError *)error {
     return accRange;
 }
 
--(void)setAccRange:(int)range
-{
-    if (![self assertConnected]) {
-        return;
-    }
+-(void)setAccRange:(int)range {
+    if (![self assertConnected]) return;
 
     if (range == LPMS_ACC_RANGE_2G ||
         range == LPMS_ACC_RANGE_4G ||
@@ -632,10 +562,7 @@ service error:(NSError *)error {
             [self _getSensorSettings];
             [self _saveParameters];
             
-            if (b) {
-                [self setStreamingMode];
-            }
-
+            if (b) [self setStreamingMode];
         });
     }
 }
@@ -645,10 +572,8 @@ service error:(NSError *)error {
 }
 
 -(void)setMagRange:(int)range {
-
-    if (![self assertConnected]) {
-        return;
-    }
+    if (![self assertConnected]) return;
+    
     if (range == LPMS_MAG_RANGE_4GAUSS ||
         range == LPMS_MAG_RANGE_8GAUSS ||
         range == LPMS_MAG_RANGE_12GAUSS ||
@@ -665,9 +590,7 @@ service error:(NSError *)error {
             [self _getSensorSettings];
             [self _saveParameters];
             
-            if (b) {
-                [self setStreamingMode];
-            }
+            if (b) [self setStreamingMode];
         });
     }
 }
@@ -677,9 +600,7 @@ service error:(NSError *)error {
 }
 
 -(void)setFilterMode:(int)mode {
-    if (![self assertConnected]) {
-        return;
-    }
+    if (![self assertConnected]) return;
 
     if (mode == LPMS_FILTER_GYR ||
         mode == LPMS_FILTER_GYR_ACC ||
@@ -690,29 +611,25 @@ service error:(NSError *)error {
         dispatch_async(queue, ^{
             BOOL b = isStreamMode;
             [self setCommandMode];
+            
             waitForAck = true;
+            
             [self lpbusSetInt32:SET_FILTER_MODE and:mode];
             [self _waitForAckLoop];
             [self _getSensorSettings];
             [self _saveParameters];
             
-            if (b) {
-                [self setStreamingMode];
-            }
+            if (b) [self setStreamingMode];
         });
     }
 }
 
 -(int)getStreamFrequency {
-    // NSLog(@"getStreamFrequency :%d",streamingFrequency);
     return streamingFrequency;
 }
 
 -(void)setStreamFrequency:(int )freq {
-
-    if (![self assertConnected]) {
-        return;
-    }
+    if (![self assertConnected]) return;
 
     if (freq == LPMS_STREAM_FREQ_5HZ ||
         freq == LPMS_STREAM_FREQ_10HZ ||
@@ -723,45 +640,41 @@ service error:(NSError *)error {
         freq == LPMS_STREAM_FREQ_400HZ) {
         
         dispatch_async(queue, ^{
-            //NSLog(@"12333");
             BOOL b = isStreamMode;
             [self setCommandMode];
+            
             waitForAck = true;
+            
             [self lpbusSetInt32:SET_STREAM_FREQ and:freq];
             [self _waitForAckLoop];
             [self _getSensorSettings];
             [self _saveParameters];
             
-            if (b) {
-                [self setStreamingMode];
-            }
+            if (b) [self setStreamingMode];
         });
     }
 }
 
 -(void)setTransmissionData:(int )v {
-    if (![self assertConnected]) {
-        return;
-    }
+    if (![self assertConnected]) return;
 
     dispatch_async(queue, ^{
         BOOL b = isStreamMode;
         [self setCommandMode];
+        
         waitForAck = true;
+        
         [self lpbusSetInt32:SET_TRANSMIT_DATA and:v];
         [self _waitForAckLoop];
         [self _getSensorSettings];
         [self _saveParameters];
         
-        if (b) {
-            [self setStreamingMode];
-        }
+        if (b) [self setStreamingMode];
     });
 }
 
 -(void)enableGyroData:(BOOL)b {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
     
     if (b)
         configurationRegister |= LPMS_GYR_RAW_OUTPUT_ENABLED;
@@ -776,13 +689,14 @@ service error:(NSError *)error {
 }
 
 -(void)enableAccData:(BOOL)b {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
+    
     if (b)
         configurationRegister |= LPMS_ACC_RAW_OUTPUT_ENABLED;
     else
         configurationRegister &= ~LPMS_ACC_RAW_OUTPUT_ENABLED;
-       [self _setTransmissionData];
+    
+    [self _setTransmissionData];
 }
 
 -(BOOL)isAccDataEnabled{    
@@ -790,14 +704,14 @@ service error:(NSError *)error {
 }
 
 -(void)enableMagData:(BOOL)b{
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     if (b)
         configurationRegister |= LPMS_MAG_RAW_OUTPUT_ENABLED;
     else
         configurationRegister &= ~LPMS_MAG_RAW_OUTPUT_ENABLED;
-        [self _setTransmissionData];
+    
+    [self _setTransmissionData];
 }
 
 -(BOOL)isMagDataEnabled {    
@@ -805,13 +719,14 @@ service error:(NSError *)error {
 }
 
 -(void)enableAngularVelData:(BOOL)b {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
+    
     if (b)
         configurationRegister |= LPMS_ANGULAR_VELOCITY_OUTPUT_ENABLED;
     else
         configurationRegister &= ~LPMS_ANGULAR_VELOCITY_OUTPUT_ENABLED;
-        [self _setTransmissionData];
+    
+    [self _setTransmissionData];
 }
 
 -(BOOL)isAngularVelDataEnable{    
@@ -820,16 +735,13 @@ service error:(NSError *)error {
 
 -(void)enableQuaternionData:(BOOL)b 
 {
-    if (![self assertConnected])
-        return;
-
+    if (![self assertConnected]) return;
     if (b)
         configurationRegister |= LPMS_QUAT_OUTPUT_ENABLED;
     else
         configurationRegister &=~LPMS_QUAT_OUTPUT_ENABLED;
-        
-        // 传输数据
-        [self _setTransmissionData];
+
+    [self _setTransmissionData];
 }
 
 -(BOOL)isQuaternionDataEnabled {    
@@ -837,29 +749,29 @@ service error:(NSError *)error {
 }
 
 -(void)enableEulerData:(BOOL)b {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     if (b)
         configurationRegister |= LPMS_EULER_OUTPUT_ENABLED;
     else
         configurationRegister &= ~LPMS_EULER_OUTPUT_ENABLED;
-        [self _setTransmissionData];
+    
+    [self _setTransmissionData];
 }
 
--(BOOL)isEulerDataEnabledP {    
+-(BOOL)isEulerDataEnabled {
     return eulerAngleEnable;
 }
 
 -(void)enableLinAccData:(BOOL)b {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     if (b)
         configurationRegister |= LPMS_LINACC_OUTPUT_ENABLED;
     else
         configurationRegister &= ~LPMS_LINACC_OUTPUT_ENABLED;
-       [self _setTransmissionData];
+    
+    [self _setTransmissionData];
 }
 
 -(BOOL)isLinAccDataEnabled {    
@@ -867,14 +779,14 @@ service error:(NSError *)error {
 }
 
 -(void)enablePressureData:(BOOL)b {
-    if (![self assertConnected ])
-        return;
+    if (![self assertConnected]) return;
 
     if (b)
         configurationRegister |= LPMS_PRESSURE_OUTPUT_ENABLED;
     else
         configurationRegister &= ~LPMS_PRESSURE_OUTPUT_ENABLED;
-        [self _setTransmissionData];
+    
+    [self _setTransmissionData];
 }
 
 -(BOOL)isPressureDataEnabled {    
@@ -882,49 +794,59 @@ service error:(NSError *)error {
 }
 
 -(void)enableAltitudeData:(BOOL)b {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
     
     if (b)
         configurationRegister |= LPMS_ALTITUDE_OUTPUT_ENABLED;
     else
         configurationRegister &= ~LPMS_ALTITUDE_OUTPUT_ENABLED;
-        [self _setTransmissionData];
+    
+    [self _setTransmissionData];
 }
 
 -(BOOL)isAltitudeDataEnabled {    
     return altitudeEnable;
 }
 
-
 -(void)enableTemperatureData:(BOOL)b {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     if (b)
         configurationRegister |= LPMS_TEMPERATURE_OUTPUT_ENABLED;
     else
         configurationRegister &= ~LPMS_TEMPERATURE_OUTPUT_ENABLED;
-        [self _setTransmissionData];
+    
+    [self _setTransmissionData];
 }
 
--(BOOL)enableTemperatureData {
+-(BOOL)isTemperatureDataEnabled {
     return temperatureEnable;
 }
 
+-(void)enableHeaveData:(BOOL)b {
+    if (![self assertConnected]) return;
+    
+    if (b)
+        configurationRegister |= LPMS_HEAVEMOTION_OUTPUT_ENABLED;
+    else
+        configurationRegister &= ~LPMS_HEAVEMOTION_OUTPUT_ENABLED;
+    
+    [self _setTransmissionData];
+}
+
 -(void)enable16BitData {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     configurationRegister &= ~LPMS_LPBUS_DATA_MODE_16BIT_ENABLED;
+    
     [self _setTransmissionData];
 }
 
 -(void)enable32BitData {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     configurationRegister &= ~LPMS_LPBUS_DATA_MODE_16BIT_ENABLED;
+    
     [self _setTransmissionData];
 }
 
@@ -935,48 +857,41 @@ service error:(NSError *)error {
         return false;
 }
 
-// Return the data length of the sensor.
 -(int)hasNewData {
     int n;
 
     @synchronized(tableArray) {
-        //[NSString stringWithFormat:@"%ld",tableArray.count]
-        n = [[NSString stringWithFormat:@"%lu",(unsigned long)tableArray.count]intValue];
+        n = [[NSString stringWithFormat:@"%lu", (unsigned long)tableArray.count] intValue];
     }
-
-    NSLog(@"Check hasNewData :%d",n);
 
     return n;
 }
 
--(id)getLpmsBData {
-    LpmsBData *d = nil;
+-(LpmsBData*)getLpmsBData {
+    bool f = false;
+    LpmsBData* d;
     
-    if (![self assertConnected])
-        return d;
+    if (![self assertConnected]) return false;
     
     if (!isStreamMode) {
-        // 流模式
+        [self lpbusSetNone:GET_SENSOR_DATA];
+        [self _waitForDataLoop];
+        
         @synchronized(tableArray) {
             while (tableArray.count > 0) {
-                d =  tableArray.lastObject;
-                // NSLog(@"DATA d %@",d);
-
+                d = tableArray.lastObject;
                 [tableArray removeLastObject];
-                // NSLog(@"Test %lu",(unsigned long)tableArray.count);
+                f = true;
             }
         }
         waitForData = true;
-
-        // wrong
-        [self lpbusSetNone:GET_SENSOR_DATA];
-        [self _waitForDataLoop];
     }
     
     @synchronized(tableArray) {
         if (tableArray.count > 0) {
-            d =  tableArray.lastObject;
+            d = tableArray.lastObject;
             [tableArray removeLastObject];
+            f = true;
         }
     }
 
@@ -987,7 +902,6 @@ service error:(NSError *)error {
     return tableArray;
 }
 
-// not string
 -(NSString*)getSerialNumber {   
     return serialNumber;
 }
@@ -1017,9 +931,8 @@ service error:(NSError *)error {
 }
 
 -(void)startSyncSensor {
-    if (![self assertConnected])
-        return;
-
+    if (![self assertConnected]) return;
+    
     [self lpbusSetNone:START_SYNC];
 
     waitForAck = true;
@@ -1027,10 +940,8 @@ service error:(NSError *)error {
 }
 
 -(void)stopSyncSensor {
-    if (![self assertConnected]) {
-        return;
-    }
-
+    if (![self assertConnected]) return;
+    
     [self lpbusSetNone:STOP_SYNC];
 
     waitForAck = true;
@@ -1038,16 +949,14 @@ service error:(NSError *)error {
 }
 
 -(void)testPing {
-    if (![self assertConnected ])
-        return;
-
+    if (![self assertConnected]) return;
+    
     [self lpbusSetNone:GET_PING];
 }
 
 -(void)resetFactorySettings {
-    if (![self assertConnected])
-        return;
-
+    if (![self assertConnected]) return;
+    
     BOOL b = isStreamMode;
 
     [self setCommandMode];
@@ -1058,14 +967,11 @@ service error:(NSError *)error {
     [self _getSensorSettings];
     [self _saveParameters];
 
-    if (b)
-        [self setStreamingMode];
+    if (b) [self setStreamingMode];
 }
 
-// 设置方向偏移
 -(void)setOrientationOffset:(int)offset {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
     
     if (offset == LPMS_OFFSET_MODE_ALIGNMENT ||
         offset == LPMS_OFFSET_MODE_HEADING ||
@@ -1074,55 +980,46 @@ service error:(NSError *)error {
     }
 }
 
-// 重置方向偏移
 -(void)resetOrientationOffset {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
  
    [self lpbusSetNone:RESET_ORIENTATION_OFFSET];
 }
 
 -(void)resetTimestamp {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     [self lpbusSetInt32:SET_TIME_STAMP and:0];
 }
 
 -(void)setTimestamp:(int)ts {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     [self lpbusSetInt32:SET_TIME_STAMP and:ts];
 }
 
-// 电池百分比
 -(void)_getBatteryPercentage {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     [self lpbusSetNone:GET_BATTERY_LEVEL];
 }
 
-// 电池电压
 -(void)_getBatteryVoltage {
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
 
     [self lpbusSetNone:GET_BATTERY_VOLTAGE];
 }
 
 -(void)getChargingStatus{
-    if (![self assertConnected])
-        return;
+    if (![self assertConnected]) return;
     
     [self lpbusSetNone:GET_CHARGING_STATUS];
 }
 
-// LP Bus Related
 -(void)lpbusSetInt32:(int)command and:(int)v {
+    NSLog(@"Set command: %d", command);
+
     for (int i = 0; i< 4 ; ++i) {
-        // rawTxData[i] = [[NSString stringWithFormat:@"%d",(v & 0xff)]floatValue];
         rawTxData[i] = (Byte)(v & 0xff);
         v = v >> 8;
     }
@@ -1130,12 +1027,17 @@ service error:(NSError *)error {
     [self sendData:command Length:4];
 }
 
--(void)lpbusSetNone:(int)command {    
+-(void)lpbusSetNone:(int)command {
+    NSLog(@"Set command: %d", command);
+    
     [self sendData:command Length:0];
 }
 
--(void)lpbusSetData:(int)command and:(int)length and:(Byte[])dataBuffer
-{    
+-(void)lpbusSetData:(int)command and:(int)length and:(Byte[])dataBuffer {
+    if (length > MAX_RXTX_BUFFER) return;
+    
+    NSLog(@"Set command: %d", command);
+    
     for (int i = 0; i < length; i++) {
         rawTxData[i] = dataBuffer[i];
     }
@@ -1143,155 +1045,120 @@ service error:(NSError *)error {
     [self sendData:command Length:length];
 }
 
-// 数据解析成功地方
 -(void)parseSensorData {
     int o = 0;
     float r2d = 57.2958f;
     
-    mLpmsBData -> _imuId = imuId;
+    mLpmsBData->_imuId = imuId;
     
-    mLpmsBData ->_timestamp = (float)convertRxbytesToInt(o, rxBuffer)*0.0025f;
-    o +=4;
+    mLpmsBData->_timestamp = (float)convertRxbytesToInt(o, rxBuffer) * 0.0025f;
+    o += 4;
         
-    dt = mLpmsBData ->_timestamp - lose;
-    lose = mLpmsBData ->_timestamp;
+    dt = mLpmsBData->_timestamp - lose;
+    lose = mLpmsBData->_timestamp;
+    
     if (dt > MaxDt) {
         MaxDt = dt;
         data = MaxDt;
     }
 
     if (gyrEnable) {        
-        mLpmsBData -> _gyr[0] = convertRxbytesToFloat(o, rxBuffer) * r2d;
-        o+= 4;
+        mLpmsBData->_gyr[0] = convertRxbytesToFloat(o, rxBuffer) * r2d;
+        o += 4;
         
-        mLpmsBData -> _gyr[1] = convertRxbytesToFloat(o, rxBuffer) * r2d;
-        o+= 4;
+        mLpmsBData->_gyr[1] = convertRxbytesToFloat(o, rxBuffer) * r2d;
+        o += 4;
         
-        mLpmsBData -> _gyr[2] = convertRxbytesToFloat(o, rxBuffer) * r2d;
-        o+= 4;
-        
-        // NSLog(@"gyr[0]: %f",mLpmsBData ->_gyr[0]);
-        // NSLog(@"gyr[1]: %f",mLpmsBData ->_gyr[1]);
-        // NSLog(@"gyr[2]: %f",mLpmsBData ->_gyr[2]);
+        mLpmsBData->_gyr[2] = convertRxbytesToFloat(o, rxBuffer) * r2d;
+        o += 4;
     }
 
-    // accEnable
     if (accEnable) {
+        mLpmsBData->_acc[0] = convertRxbytesToFloat(o, rxBuffer);
+        o += 4;
         
-        // NSLog(@"%x",rxBuffer);
-        mLpmsBData -> _acc[0] = convertRxbytesToFloat(o, rxBuffer);
-        o+= 4;
+        mLpmsBData->_acc[1] = convertRxbytesToFloat(o, rxBuffer);
+        o += 4;
         
-        mLpmsBData -> _acc[1] = convertRxbytesToFloat(o, rxBuffer);
-        o+= 4;
-        
-        mLpmsBData -> _acc[2] = convertRxbytesToFloat(o, rxBuffer);
-        o+= 4;
-        
-        // NSLog(@"acc[0]: %f",mLpmsBData ->_acc[0]);
-        // NSLog(@"acc[1]: %f",mLpmsBData ->_acc[1]);
-        // NSLog(@"acc[2]: %f",mLpmsBData ->_acc[2]);
+        mLpmsBData->_acc[2] = convertRxbytesToFloat(o, rxBuffer);
+        o += 4;
     }
 
-    // magEnable
-    if(magEnable) { 
-        mLpmsBData -> _mag[0] = convertRxbytesToFloat(o, rxBuffer);
-        o+= 4;
-        mLpmsBData -> _mag[1] = convertRxbytesToFloat(o, rxBuffer);
-        o+= 4;
-        mLpmsBData -> _mag[2] = convertRxbytesToFloat(o, rxBuffer);
+    if (magEnable) {
+        mLpmsBData->_mag[0] = convertRxbytesToFloat(o, rxBuffer);
         o+= 4;
         
-        // NSLog(@"mag[0]: %f",mLpmsBData ->_mag[0]);
-        // NSLog(@"mag[0]: %f",mLpmsBData ->_mag[1]);
-        // NSLog(@"mag[0]: %f",mLpmsBData ->_mag[2]);
+        mLpmsBData->_mag[1] = convertRxbytesToFloat(o, rxBuffer);
+        o+= 4;
+        
+        mLpmsBData->_mag[2] = convertRxbytesToFloat(o, rxBuffer);
+        o+= 4;
     }
     
-    if(angularVelEnable){
+    if (angularVelEnable) {
+        mLpmsBData->_angVel[0] = convertRxbytesToFloat(o, rxBuffer) * r2d;
+        o += 4;
         
-        mLpmsBData -> _angVel[0] = convertRxbytesToFloat(o, rxBuffer) * r2d;
-        o+= 4;
+        mLpmsBData->_angVel[1] = convertRxbytesToFloat(o, rxBuffer) * r2d;
+        o += 4;
         
-        mLpmsBData -> _angVel[1] = convertRxbytesToFloat(o, rxBuffer) * r2d;
-        o+= 4;
-        
-        mLpmsBData -> _angVel[2] = convertRxbytesToFloat(o, rxBuffer) * r2d;
-        o+= 4;
-        
-        // NSLog(@"angVel[0]: %f",mLpmsBData ->_angVel[0]);
-        // NSLog(@"angVel[1]: %f",mLpmsBData ->_angVel[1]);
-        // NSLog(@"angVel[2]: %f",mLpmsBData ->_angVel[2]);
+        mLpmsBData->_angVel[2] = convertRxbytesToFloat(o, rxBuffer) * r2d;
+        o += 4;
     }
 
-    // 开关
     if (quaternionEnable) {
-        mLpmsBData -> _quat[0] = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_quat[0] = convertRxbytesToFloat(o, rxBuffer);
         o+= 4;
         
-        mLpmsBData -> _quat[1] = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_quat[1] = convertRxbytesToFloat(o, rxBuffer);
         o+= 4;
         
-        mLpmsBData -> _quat[2] = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_quat[2] = convertRxbytesToFloat(o, rxBuffer);
         o+= 4;
         
-        mLpmsBData -> _quat[3] = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_quat[3] = convertRxbytesToFloat(o, rxBuffer);
         o+= 4;
-        
-        // NSLog(@"quat[0]: %f",mLpmsBData ->_quat[0]);
-        // NSLog(@"quat[1]: %f",mLpmsBData ->_quat[1]);
-        // NSLog(@"quat[2]: %f",mLpmsBData ->_quat[2]);
-        // NSLog(@"quat[3]: %f",mLpmsBData ->_quat[3]);
     }
     
     if (eulerAngleEnable) {
-        mLpmsBData -> _euler[0] = convertRxbytesToFloat(o, rxBuffer) * r2d;
+        mLpmsBData->_euler[0] = convertRxbytesToFloat(o, rxBuffer) * r2d;
         o+= 4;
         
-        mLpmsBData -> _euler[1] = convertRxbytesToFloat(o, rxBuffer) * r2d;
+        mLpmsBData->_euler[1] = convertRxbytesToFloat(o, rxBuffer) * r2d;
         o+= 4;
         
-        mLpmsBData -> _euler[2] = convertRxbytesToFloat(o, rxBuffer) * r2d;
+        mLpmsBData->_euler[2] = convertRxbytesToFloat(o, rxBuffer) * r2d;
         o+= 4;
-        
-        // NSLog(@"euler[0]: %f",mLpmsBData ->_euler[0]);
-        // NSLog(@"euler[1]: %f",mLpmsBData ->_euler[1]);
-        // NSLog(@"euler[2]: %f",mLpmsBData ->_euler[2]);
     }
     
     if (linAccEnable) {
-        mLpmsBData -> _linAcc[0] = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_linAcc[0] = convertRxbytesToFloat(o, rxBuffer);
         o+= 4;
         
-        mLpmsBData -> _linAcc[1] = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_linAcc[1] = convertRxbytesToFloat(o, rxBuffer);
         o+= 4;
         
-        mLpmsBData -> _linAcc[2] = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_linAcc[2] = convertRxbytesToFloat(o, rxBuffer);
         o+= 4;
-        
-        // NSLog(@"linAcc[0]: %f",mLpmsBData ->_linAcc[0]);
-        // NSLog(@"linAcc[1]: %f",mLpmsBData ->_linAcc[1]);
-        // NSLog(@"linAcc[2]: %f",mLpmsBData ->_linAcc[2]);
     }
     
     if (pressureEnable) {
-        mLpmsBData -> _pressure = convertRxbytesToFloat(o, rxBuffer);
-        o+=4;
+        mLpmsBData->_pressure = convertRxbytesToFloat(o, rxBuffer);
+        o += 4;
     }
     
     if (altitudeEnable) {
-        // 高度计
-        mLpmsBData -> _altitude = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_altitude = convertRxbytesToFloat(o, rxBuffer);
         o += 4;
     }
     
     if (temperatureEnable) {
-        // 温度计
-        mLpmsBData -> _temperature = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_temperature = convertRxbytesToFloat(o, rxBuffer);
         o += 4;
     }
     
     if (heaveEnable) {
-        mLpmsBData -> _heave = convertRxbytesToFloat(o, rxBuffer);
+        mLpmsBData->_heave = convertRxbytesToFloat(o, rxBuffer);
         o += 4;
     }
     
@@ -1299,14 +1166,10 @@ service error:(NSError *)error {
         if (tableArray.count < DATA_QUEUE_SIZE ) {
             [tableArray addObject:[[LpmsBData alloc]initWithLpmsBData:mLpmsBData]];
             [dl logLpmsData:[[LpmsBData alloc]initWithLpmsBData:mLpmsBData]];
-            
-            // NSLog(@"Count %lu",(unsigned long)[tableArray count]);
-            // NSLog(@"B2 %@",[[LpmsBData alloc]initWithLpmsBData:mLpmsBData]);
-        } else {  
+        } else {
             [tableArray removeLastObject];
             [tableArray addObject:[[LpmsBData alloc]initWithLpmsBData:mLpmsBData]];
             [dl logLpmsData:[[LpmsBData alloc]initWithLpmsBData:mLpmsBData]];
-            // NSLog(@"Test");
         }
     }
     
@@ -1318,7 +1181,6 @@ service error:(NSError *)error {
     float r2d = 57.2958f;
     
     if (a16 == true) {
-        // resettimestamp
         mLpmsBData = [[LpmsBData alloc] initWithLpmsBData];
     }
 
@@ -1330,84 +1192,71 @@ service error:(NSError *)error {
     mLpmsBData->_frameNumber = frameCounter;
     frameCounter++;
 
-    if ( gyrEnable )
-    {
+    if (gyrEnable) {
         for (int i = 0; i < 3; ++i) {
             mLpmsBData->_gyr[i] = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 1000.0f * r2d;
             o += 2;
         }
-        // Log.d(TAG, mLpmsBData.gyr[0]+" "+mLpmsBData.gyr[1]+" "+mLpmsBData.gyr[2]);
     }
 
-    if ( accEnable )
-    {
+    if (accEnable) {
         for (int i = 0; i < 3; ++i) {
             mLpmsBData->_acc[i] = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 1000.0f;
             o += 2;
-
         }
     }
 
-    if ( magEnable )
-    {
+    if (magEnable) {
         for (int i = 0; i < 3; ++i) {
             mLpmsBData->_mag[i] = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 100.0f;
             o += 2;
         }
     }
 
-    if ( angularVelEnable )
-    {
+    if (angularVelEnable) {
         for (int i = 0; i < 3; ++i) {
             mLpmsBData->_angVel[i] = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 1000.0f* r2d;
             o += 2;
         }
     }
 
-    if ( quaternionEnable )
-    {
+    if (quaternionEnable) {
         for (int i = 0; i < 4; ++i) {
             mLpmsBData->_quat[i] = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 1000.0f;
             o += 2;
         }
     }
 
-    if ( eulerAngleEnable )
-    {
+    if (eulerAngleEnable) {
         for (int i = 0; i < 3; ++i) {
             mLpmsBData->_euler[i] = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 1000.0f * r2d;
             o += 2;
         }
     }
 
-    if ( linAccEnable )
-    {
+    if (linAccEnable) {
         for (int i = 0; i < 3; ++i) {
             mLpmsBData->_linAcc[i] = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 1000.0f;
             o += 2;
         }
     }
 
-    if ( pressureEnable )
-    {
+    if (pressureEnable) {
         mLpmsBData->_pressure = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 100.0f;
         o += 2;
     }
 
-    if ( altitudeEnable )
-    {
+    if (altitudeEnable) {
         mLpmsBData->_altitude = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 10.0f;
         o += 2;
     }
 
-    if ( temperatureEnable )
-    {
+    if (temperatureEnable) {
         mLpmsBData->_temperature = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 100.0f;
         o += 2;
     }
 
-    if ( heaveEnable )
-    {
+    if (heaveEnable) {
         mLpmsBData->_heave = (float) ((short) (((rxBuffer[o + 1]) << 8) | (rxBuffer[o + 0] & 0xff))) / 100.0f;
         o += 2;
     }
@@ -1424,28 +1273,22 @@ service error:(NSError *)error {
     newDataFlag = true;
 }
 
-
 -(void)parseFunction{
-    // 第一次进来 ＝ 0； ＝ 91
-    // NSLog(@"currentFunction :%d", currentFunction);
-
     switch (currentFunction) {
         case REPLY_ACK:
-            NSLog(@"parseFunction: Reply Ack~");
+            NSLog(@"parseFunction: ACK");
             waitForAck = false;
         break;
             
         case REPLY_NACK:
-            NSLog(@"parseFunction: NAck~");
+            NSLog(@"parseFunction: NACK");
             waitForAck = false;
         break;
             
         case GET_CONFIG:
-            // 配置登记册
             configurationRegister = convertRxbytesToInt(0, rxBuffer);
             
-            // NSLog(@"ParseFunction configurationRegister :%d",configurationRegister);
-            // 配置注册好了
+            NSLog(@"parseFunction configurationRegister: %x",configurationRegister);
         
             configurationRegisterReady = true;
             waitForData = false;
@@ -1456,131 +1299,121 @@ service error:(NSError *)error {
         break;
             
         case GET_SENSOR_DATA:
-            // NSLog(@"parseFunction :get sensor data come in");
+            if (isStreamMode == false) NSLog(@"parseFunction: GET_SENSOR_DATA");
+            
             if ((configurationRegister & LPMS_LPBUS_DATA_MODE_16BIT_ENABLED) != 0) {
                 [self parseSensorData16Bit];
-                // NSLog(@"parseSensorData16Bit");
             } else {
-                // 默认，先做
                 [self parseSensorData];
-
-                // NSLog(@"parseSensorData");
-                
             }
+            
             waitForData = false;
         break;
             
         case GET_IMU_ID:
-            NSLog(@"parseFunction: get IMU id ~");
+            NSLog(@"parseFunction: GET_IMU_ID");
             imuId = convertRxbytesToInt(0, rxBuffer);
             waitForData = false;
         break;
             
         case GET_GYR_RANGE:
-            NSLog(@"parseFunction: get GYR_range  ~");
+            NSLog(@"parseFunction: GET_GYR_RANGE");
             gyrRange = convertRxbytesToInt(0, rxBuffer);
             waitForData = false;
         break;
             
-        case GET_ACC_RANGE: // 加速度数据,
-            NSLog(@"parseFunction: get ACC_range  ~");
+        case GET_ACC_RANGE:
+            NSLog(@"parseFunction: GET_ACC_RANGE");
             accRange = convertRxbytesToInt(0, rxBuffer);
             waitForData = false;
         break;
             
         case GET_MAG_RANGE:
-            NSLog(@"parseFunction: get MAG_range  ~");
+            NSLog(@"parseFunction: GET_MAG_RANGE");
             magRange = convertRxbytesToInt(0, rxBuffer);
             waitForData = false;
         break;
             
         case GET_FILTER_MODE:
+            NSLog(@"parseFunction: GET_FILTER_MODE");
             filterMode = convertRxbytesToInt(0, rxBuffer);
             waitForData = false;
         break;
             
         case GET_BATTERY_LEVEL:
-            NSLog(@"parseFunction: get Battery Level ~");
-            mLpmsBData -> _batteryLevel = convertRxbytesToFloat(0, rxBuffer);
+            NSLog(@"parseFunction: GET_BATTERY_LEVEL");
+            mLpmsBData->_batteryLevel = convertRxbytesToFloat(0, rxBuffer);
             batteryLevel = mLpmsBData -> _batteryLevel;
-            // Log.d(TAG, "GET_BATTERY_LEVEL " +  mLpmsBData.batteryLevel);
             waitForData = false;
         break;
             
-        case GET_CHARGING_STATUS://
-            mLpmsBData -> _chargingStatus = convertRxbytesToInt(0, rxBuffer);
-            // Log.d(TAG, "GET_CHARGING_STATUS ");
+        case GET_CHARGING_STATUS:
+            NSLog(@"parseFunction: GET_CHARGING_STATUS");
+            mLpmsBData->_chargingStatus = convertRxbytesToInt(0, rxBuffer);
             waitForData = false;
         break;
             
-        case GET_BATTERY_VOLTAGE://
-            NSLog(@"parseFunction: get Battery Voltage ~");
+        case GET_BATTERY_VOLTAGE:
+            NSLog(@"parseFunction: GET_BATTERY_VOLTAGE");
             mLpmsBData -> _batteryVoltage = convertRxbytesToFloat(0, rxBuffer);
             batteryVoltage = mLpmsBData -> _batteryVoltage;
-            // Log.d(TAG, "GET_BATTERY_VOLTAGE " + mLpmsBData.batteryVoltage);
             waitForData = false;
         break;
             
         case GET_SERIAL_NUMBER:
-            NSLog(@"parseFunction :get serial number");
+            NSLog(@"parseFunction: GET_SERIAL_NUMBER");
             serialNumber = convertRxbytesToString(24, rxBuffer);
-            // Log.d(TAG, serialNumber);
             serialNumberReady = true;
             waitForData = false;
         break;
             
-        case GET_DEVICE_NAME://
+        case GET_DEVICE_NAME:
             deviceName = convertRxbytesToString(16, rxBuffer);
-            // Log.d(TAG, deviceName);
-            NSLog(@"parseFunction :get device name");
+            NSLog(@"parseFunction: GET_DEVICE_NAME");
             deviceNameReady = true;
             waitForData = false;
         break;
             
-        case GET_FIRMWARE_INFO://
-            NSLog(@"parseFunction :get firmware info");
+        case GET_FIRMWARE_INFO:
+            NSLog(@"parseFunction: GET_FIRMWARE_INFO");
             firmwareInfo = convertRxbytesToString(16, rxBuffer);
-            // NSLog(@"parseFunction firmwareInfo :%@",firmwareInfo);
-            // Log.d(TAG, firmwareInfo);
             firmwareInfoReady = true;
             waitForData = false;
         break;
             
-        case GET_FIRMWARE_VERSION://
-            NSLog(@"parseFunction :get firmware version");
+        case GET_FIRMWARE_VERSION:
+            NSLog(@"parseFunction: GET_FIRMWARE_VERSION");
             vmajor = convertRxbytesToInt(8, rxBuffer);
             vminor = convertRxbytesToInt(4, rxBuffer);
             vbuild = convertRxbytesToInt(0, rxBuffer);
-            firmwareVersion = [NSString stringWithFormat:@"%d%@%d%@%d",vmajor,@".",vminor,@".",vbuild];
-            // NSLog(@"%@",firmwareVersion);
+            firmwareVersion = [NSString stringWithFormat:@"%d%@%d%@%d", vmajor, @".", vminor, @".", vbuild];
             waitForData = false;
         break;
             
         case GET_PING:
-            mT = (float) convertRxbytesToInt(0, rxBuffer)*0.0025f;
-            // Log.d(TAG, "GET_PING: " +  mT );
+            NSLog(@"parseFunction: GET_PING");
+            mT = (float) convertRxbytesToInt(0, rxBuffer) * 0.0025f;
             waitForData = false;
         break;
             
         case START_SYNC:
-            // Log.d(TAG, "START_SYNC");
+            NSLog(@"parseFunction: START_SYNC");
             waitForAck = false;
         break;
             
         case STOP_SYNC:
-            // Log.d(TAG, "STOP_SYNC");
+            NSLog(@"parseFunction: STOP_SYNC");
             waitForAck = false;
         break;
             
         case SET_TRANSMIT_DATA:
-            // NSLog(@"parseFunction: set transmit data");
+            NSLog(@"parseFunction: SET_TRANSMIT_DATA");
             waitForData = false;
         break;
             
-        case GET_TEMPERATURE://
-            // mLpmsBData.temperature = convertRxbytesToFloat(0, rxBuffer);
+        case GET_TEMPERATURE:
+            NSLog(@"parseFunction: GET_TEMPERATURE");
             mLpmsBData -> _temperature = convertRxbytesToFloat(0, rxBuffer);
-            // Log.d(TAG, "GET_TEMPERATURE");
             waitForData = false;
         break;
     }
@@ -1589,21 +1422,13 @@ service error:(NSError *)error {
     waitForData = false;
 }
 
-
-
-BOOL printData = true;
-
 -(void) parse:(NSData *)data {
     int lrcReceived = 0;
     b = (Byte*)[data bytes];    
     
     for (int i = 0; i < [data length]; i++) {
-        // NSLog(@"rxState :%d %x",rxState, b[i]);
-        // NSLog(@"length %lu",(unsigned long)[data length]);
-
         switch (rxState) {
             case PACKET_TEST:
-                
                 if (b[i] == 0x0a) {
                     rxState = PACKET_END;
                 }
@@ -1624,8 +1449,6 @@ BOOL printData = true;
             case PACKET_ADDRESS1:
                 inBytes[1] = b[i];
                 currentAddress = convertRxbytesToInt16(0, inBytes);
-                // Log.d("address",""+currentAddress);
-                // NSLog(@"address :%d",currentAddress);
                 imuId = currentAddress;
                 rxState = PACKET_FUNCTION0;
                 break;
@@ -1649,7 +1472,6 @@ BOOL printData = true;
             case PACKET_LENGTH1:
                 inBytes[1] = b[i];
                 currentLength = convertRxbytesToInt16(0, inBytes);
-                // NSLog(@"currentLength:%d",currentLength);//maybe
                 rxState = PACKET_RAW_DATA;
                 rxIndex = 0;
                 break;
@@ -1676,13 +1498,12 @@ BOOL printData = true;
                 }
                 break;
                 
-            case PACKET_LRC_CHECK1: //校检
+            case PACKET_LRC_CHECK1:
                 inBytes[1] = b[i];
                 
                 lrcReceived = convertRxbytesToInt16(0, inBytes);
                 lrcCheck = lrcCheck & 0xffff;
                 
-                // 第一个丢包问题
                 if (lrcReceived == lrcCheck) {
                     [self parseFunction];
                 } else {
@@ -1690,12 +1511,10 @@ BOOL printData = true;
                 }
                 
                 rxState = PACKET_TEST;
-                // rxState = PACKET_END;
                 break;
                 
             default:
                 rxState = PACKET_TEST;
-                // rxState = PACKET_END;
                 break;
         }
     }
@@ -1703,7 +1522,6 @@ BOOL printData = true;
 
 -(void)sendData:(int )function Length:(int )length {
     int txLrcCheck;
-    // NSLog(@"sendData");
 
     txBuffer[0] = 0x3a;
 
@@ -1717,10 +1535,8 @@ BOOL printData = true;
 
     txLrcCheck = (imuId & 0xffff) + (function & 0xffff) + (length & 0xffff);
     
-    // NSLog(@"sendData txLrcCheck %d", txLrcCheck);
     for (int j = 0; j <length ; j++) {
         txLrcCheck += ceilf(rawTxData[j] & 0xff);
-        // NSLog(@"txLrcCheck :%d",txLrcCheck);
     }
     
     [self convertInt16ToTxbytes:txLrcCheck and:7+length and:txBuffer];
@@ -1733,41 +1549,40 @@ BOOL printData = true;
     
     for (int i = 0; i < 11+length; i++) {
         news = [NSString stringWithFormat:@"%x", txBuffer[i] & 0xff];
-        // NSLog(@"sendData :%@", news);
         
         s = [NSString stringWithFormat:@"%@%@", s, news];
     }
-    NSLog(@"sendData s:%@",s);
+    // NSLog(@"sendData s:%@", s);
     
     @try {
-        [self wirte:txBuffer length:length+11];
-        // NSLog(@"Test: %hhu",txBuffer[14]);
+        [self btWrite:txBuffer length:length+11];
     }
     @catch (NSException *exception) {
         NSLog(@"mOutStream exception: %@",exception);
     }
 }
 
--(void)wirte:(Byte*)b length:(int)l {
+-(void)btWrite:(Byte*)b length:(int)l {
     NSData *data = [[NSData alloc] initWithBytes:b length:l];
-    // CBCharacteristicWriteWithResponse / CBCharacteristicWriteWithoutResponse
     [p writeValue:data forCharacteristic:chara type:CBCharacteristicWriteWithResponse];
 }
 
-// 回调
 -(void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
-    // NSLog(@"didWriteValueForCharacteristic");
-    
     [p readValueForCharacteristic:chara];
     Check = true;
 
     if (error) {
-        NSLog(@"didWriteValueForCharacteristic error :%@",error.localizedDescription);
+        NSLog(@"didWriteValueForCharacteristic error :%@", error.localizedDescription);
     }
 }
 
--(void)sendAck{ [self sendData:REPLY_ACK Length:0]; }
--(void)sendNack{ [self sendData:REPLY_NACK Length:0]; }
+-(void)sendAck {
+    [self sendData:REPLY_ACK Length:0];
+}
+
+-(void)sendNack {
+    [self sendData:REPLY_NACK Length:0];
+}
 
 typedef union bytesToFloat {    
     float f;
@@ -1775,7 +1590,6 @@ typedef union bytesToFloat {
     int i;
 } bytesToFloat;
 
-// Test
 float convertRxbytesToFloat(int offset,Byte buffer[]) {
     bytesToFloat val;
     int l;
@@ -1789,7 +1603,6 @@ float convertRxbytesToFloat(int offset,Byte buffer[]) {
     l |= ((long) buffer[offset + 3] << 24);
     
     val.i = l;
-    // NSLog(@"val int : %f",val.f);
 
     return val.f;
 }
@@ -1797,10 +1610,10 @@ float convertRxbytesToFloat(int offset,Byte buffer[]) {
 int convertRxbytesToInt(int offset, Byte buffer[]) {
     int v;
 
-    v = (int) ((buffer[offset] & 0xFF)
-               | ((buffer[offset+1] & 0xFF)<<8)
-               | ((buffer[offset+2] & 0xFF)<<16)
-               | ((buffer[offset+3] & 0xFF)<<24));
+    v = (int) ((buffer[offset] & 0xff)
+               | ((buffer[offset+1] & 0xff) << 8)
+               | ((buffer[offset+2] & 0xff) << 16)
+               | ((buffer[offset+3] & 0xff) << 24));
 
     return v;    
 }
@@ -1808,14 +1621,14 @@ int convertRxbytesToInt(int offset, Byte buffer[]) {
 int convertRxbytesToInt16(int offset, Byte buffer[]) {
     int v;
     
-    v= (int) ((buffer[offset]&0xFF) | ((buffer[offset+1]<<8) & 0xFF00));
-    // NSLog(@"int16 :%d",v);
-
+    v = (int) ((buffer[offset] & 0xff) | ((buffer[offset+1] << 8) & 0xff00));
+    
     return v;
 }
 
 NSString* convertRxbytesToString(int length, Byte buffer[]) {
-    // Byte[] t = new byte[length];
+    if (length > MAX_RXTX_BUFFER) return @"";
+
     Byte t[length];
 
     for (int i = 0; i < length; i++) {
@@ -1823,50 +1636,32 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     }
 
     NSString *decodedString =[[NSString stringWithFormat:@"%s",t] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    // NSLog(@"convertRxbytesToString :%@",decodedString);
 
     return decodedString;
 }
 
-// BYTE转32位int
 -(void)convertIntToTxbytes:(int)v and:(int)offset and:(Byte[])buffer {
-    Byte t[4];
-
-    t[3] = (Byte)(0xff & v);
-
-    for (int i = 0; i < 4; i++) {
-        buffer[3 - i + offset] = t[i];
-    }
+    buffer[0+offset] = (Byte)(v & 0xff);
+    buffer[1+offset] = (Byte)(v >> 8) & 0xff;
+    buffer[2+offset] = (Byte)(v >> 16) & 0xff;
+    buffer[3+offset] = (Byte)(v >> 24) & 0xff;
 }
 
-// BYTE转16位int
 -(void)convertInt16ToTxbytes:(int)v and:(int)offset and:(Byte[])buffer {
-    Byte t[2];
-
-    t[1] = (Byte)(v & 0xff);
-
-    // 不能注释
-    for (int i = 0; i < 2; i++) {
-        buffer[1 - i + offset] = t[i];
-    }
+    buffer[0+offset] = (Byte)(v & 0xff);
+    buffer[1+offset] = (Byte)((v >> 8) & 0xff);
 }
 
 -(void)convertFloatToTxbytes:(float)f and:(int)offset and:(Byte[])buffer{
-    int v = ceilf(f);
-    Byte t[4];
-
-    t[3] = (Byte)(v & 0xff);
-
-    for (int i = 0; i < 4; i++) {
-        buffer[3 - i + offset] = t[i];
-    }
+    bytesToFloat btf;
+    
+    btf.f = f;
+    
+    [self convertIntToTxbytes:f and:offset and:buffer];
 }
 
 -(BOOL)startLogging {
     if (connectionStatus == SENSOR_STATUS_DISCONNECTED) {
-        [dl setStatusMesg:@"NO sensor connected"];
-        NSLog(@"NO sensor connected");
-
         return false;
     }
 
@@ -1887,34 +1682,29 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     return [dl isLogging];
 }
 
-//　-(NSString)getLoggerStatusMesg　{   
+/* -(NSString)getLoggerStatusMesg　{
     return [dl getStatusMesg];
 }
 
-//　-(NSString)getOutputFilename　{     
+-(NSString)getOutputFilename　{
     return [dl getOutputFilename];
-}
+} */
 
--(void)_waitForAckLoop　{
+-(void)_waitForAckLoop {
     int timeout = 0;
 
     while (timeout++ < 60 && waitForAck) {
         @try {
-            //　NSLog(@"ack timeout :%i",timeout);
-
-            //　单位为秒
             [NSThread sleepForTimeInterval:PARAMETER_SET_DELAY];
         }
 
         @catch (NSException *exception) {
-            NSLog(@"_waitForAckLoop exception :%@",exception);
+            NSLog(@"waitForAckLoop exception :%@",exception);
         }
     }
 }
 
-
-//　等待数据循环
--(void)_waitForDataLoop{
+-(void)_waitForDataLoop {
     int  timeout = 0;
 
     while (timeout++ < 60 && waitForData) {
@@ -1922,24 +1712,16 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
             [NSThread sleepForTimeInterval:PARAMETER_SET_DELAY];
         }
         @catch (NSException *exception) {
-            NSLog(@"_waitForDataLoop exception :%@",exception);
+            NSLog(@"waitForDataLoop exception :%@",exception);
         }
     }
 }
 
-//　获取传感器设定
--(void)_getSensorSettings　{
+-(void)_getSensorSettings {
     [self _getSerialNumber];
-
-    //　3a105b0005c0da
     [self _getDeviceName];
-
-    //　3a105c0005d0da
     [self _getFirmwareInfo];
-
-    //　3a10400050da
     [self _getConfig];
-
     [self _getGyroRange];
     [self _getAccRange];
     [self _getMagRange];
@@ -1947,12 +1729,9 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     [self printConfig];
 }
 
-//　获取配置
--(void)_getConfig　{
-    //　NSLog(@"_getConfig %d",configurationRegisterReady);
+-(void)_getConfig {
     configurationRegisterReady = false;
     [self lpbusSetNone:GET_CONFIG];
-    //　configurationRegisterReady  = true
 
     while (!configurationRegisterReady) {
         @try {
@@ -1962,134 +1741,126 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
             NSLog(@"_getConfig exception :%@",exception);
         }
     }
-
-    //　1110842396
-    //　NSLog(@"_getconfig configurationRegister :%d",configurationRegister);
     
     [self parseConfig:configurationRegister];
 }
 
--(void)parseConfig:(int)config　{
+-(void)parseConfig:(int)config {
     //　Stream frequency
     if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_5HZ_ENABLED) {
         streamingFrequency = LPMS_STREAM_FREQ_5HZ;
-    }　else if((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_10HZ_ENABLED){
+    } else if((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_10HZ_ENABLED) {
         streamingFrequency = LPMS_STREAM_FREQ_10HZ;
-    }　else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_25HZ_ENABLED)　{
+    } else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_25HZ_ENABLED) {
         streamingFrequency = LPMS_STREAM_FREQ_25HZ;
-    }　else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_50HZ_ENABLED)　{
+    } else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_50HZ_ENABLED) {
         streamingFrequency = LPMS_STREAM_FREQ_50HZ;
-    }　else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_100HZ_ENABLED)　{
+    } else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_100HZ_ENABLED) {
         streamingFrequency = LPMS_STREAM_FREQ_100HZ;
-    }　else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_200HZ_ENABLED)　{
+    } else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_200HZ_ENABLED) {
         streamingFrequency = LPMS_STREAM_FREQ_200HZ;
-    }　else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_400HZ_ENABLED)　{
+    } else if ((configurationRegister & LPMS_STREAM_FREQ_MASK) == LPMS_STREAM_FREQ_400HZ_ENABLED) {
         streamingFrequency = LPMS_STREAM_FREQ_400HZ;
     }
     
     if ((config & LPMS_GYR_RAW_OUTPUT_ENABLED) != 0) {
         gyrEnable = true;
-    }　else　{
+    } else {
         gyrEnable = false;
     }
     
     if ((config & LPMS_ACC_RAW_OUTPUT_ENABLED) != 0) {
         accEnable = true;
-    }　else　{
+    } else {
         accEnable = false;
     }
     
     if ((config & LPMS_MAG_RAW_OUTPUT_ENABLED) != 0) {
         magEnable = true;
-    }　else　{
+    } else {
         magEnable = false;
     }
     
     if ((config & LPMS_ANGULAR_VELOCITY_OUTPUT_ENABLED) != 0) {
         angularVelEnable = true;
-    }　else　{
+    } else {
         angularVelEnable = false;
     }
     
     if ((config & LPMS_QUAT_OUTPUT_ENABLED) != 0) {
         quaternionEnable = true;
-    }　else　{
+    } else {
         quaternionEnable = false;
     }
     
     if ((config & LPMS_EULER_OUTPUT_ENABLED) != 0) {
         eulerAngleEnable = true;
-    }　else　{
+    } else {
         eulerAngleEnable = false;
     }
     
     if ((config & LPMS_LINACC_OUTPUT_ENABLED) != 0) {
         linAccEnable = true;
-    }　else　{
+    } else {
         linAccEnable = false;
     }
     
     if ((config & LPMS_PRESSURE_OUTPUT_ENABLED) != 0) {
         pressureEnable = true;
-    }　else　{
+    } else {
         pressureEnable = false;
     }
     
     if ((config & LPMS_TEMPERATURE_OUTPUT_ENABLED) != 0) {
         temperatureEnable = true;
-    }　else　{
+    } else {
         temperatureEnable = false;
     }
     
     if ((config & LPMS_ALTITUDE_OUTPUT_ENABLED) != 0) {
         altitudeEnable = true;
-    }　else　{
+    } else {
         altitudeEnable = false;
     }
     
     if ((config & LPMS_HEAVEMOTION_OUTPUT_ENABLED) != 0) {
         heaveEnable = true;
-    }　else　{
+    } else {
         heaveEnable = false;
     }
     
     if ((config & LPMS_LPBUS_DATA_MODE_16BIT_ENABLED) != 0) {
         sixteenBitDataEnable = true;
-    }　else　{
+    } else {
         sixteenBitDataEnable = false;
     }
 }
 
-//　获取gyro范围
--(void)_getGyroRange　{ 
+-(void)_getGyroRange {
     waitForData = true;
     [self lpbusSetNone:GET_GYR_RANGE];
     [self _waitForDataLoop];
 }
 
-//　获取acc范围
--(void)_getAccRange　{
+-(void)_getAccRange {
     waitForData = true;
     [self lpbusSetNone:GET_ACC_RANGE];
     [self _waitForDataLoop];
 }
 
-//　获取mag范围
--(void)_getMagRange　{
+-(void)_getMagRange {
     waitForData = true;
     [self lpbusSetNone:GET_MAG_RANGE];
     [self _waitForDataLoop];
 }
 
-//　获取过滤模式
--(void)_getFilterMode　{
+-(void)_getFilterMode {
     waitForData = true;
     [self lpbusSetNone:GET_FILTER_MODE];
     [self _waitForDataLoop];
 }
 
-//　获取序列号
--(void)_getSerialNumber　{
+-(void)_getSerialNumber {
     serialNumberReady = false;
     serialNumber = @"";
     [self lpbusSetNone:GET_SERIAL_NUMBER];
@@ -2097,7 +1868,6 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     while (!serialNumberReady) {
         @try {
             [NSThread sleepForTimeInterval:PARAMETER_SET_DELAY];
-            //　[NSTimer scheduledTimerWithTimeInterval:PARAMETER_SET_DELAY target:self selector:@selector(_waitForAckLoop) userInfo:nil repeats:NO];
         }
         @catch (NSException *exception) {
             NSLog(@"_getSerialNumber exception:%@",exception);
@@ -2105,8 +1875,7 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     }
 }
 
-//　获取name
--(void)_getDeviceName　{
+-(void)_getDeviceName {
     deviceNameReady = false;
     deviceName = @"";
 
@@ -2122,8 +1891,7 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     }
 }
 
-//　获取固件信息
--(void)_getFirmwareInfo　{
+-(void)_getFirmwareInfo {
     firmwareInfoReady = false;
     firmwareInfo = @"";
 
@@ -2139,14 +1907,14 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     }
 }
 
--(void)_saveParameters　{
+-(void)_saveParameters {
     waitForAck = true;
 
     [self lpbusSetNone:WRITE_REGISTERS];
     [self _waitForAckLoop];
 }
 
--(void)_setTransmissionData　{
+-(void)_setTransmissionData {
     BOOL b = isStreamMode;
 
     [self setCommandMode];
@@ -2154,18 +1922,16 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
 
     [self lpbusSetInt32:SET_TRANSMIT_DATA and:configurationRegister];
     [self _waitForAckLoop];
-    [self _getSensorSettings];
-    [self _saveParameters];
+    // [self _getSensorSettings];
+    // [self _saveParameters];
 
     if (b) {
         [self setStreamingMode];
-    }    
+    }
 }
 
 -(BOOL) assertConnected { 
-    if　(connectionStatus != SENSOR_STATUS_DISCONNECTED)　{
-        return true;
-    }
+    if (connectionStatus != SENSOR_STATUS_DISCONNECTED) return true;
 
     return false;
 }
@@ -2176,7 +1942,6 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     NSLog(@"LpmsB2 DN: %@",deviceName);
     NSLog(@"LpmsB2 imuId: %d",imuId);
 
-    // 流的频率
     NSLog(@"LpmsB2 StreamFreq: %d",streamingFrequency);
     NSLog(@"LpmsB2 Gyro: %d",gyrRange);
     NSLog(@"LpmsB2 Acc: %d",accRange);
@@ -2243,9 +2008,9 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     }
     
     if (heaveEnable) {
-        NSLog(@"LpmsB2 heave ENABLED");
+        NSLog(@"LpmsB2 HEAVE ENABLED");
     } else {
-        NSLog(@"LpmsB2 heave DISABLED");
+        NSLog(@"LpmsB2 HEAVE DISABLED");
     }
     
     if (sixteenBitDataEnable) {
@@ -2255,13 +2020,11 @@ NSString* convertRxbytesToString(int length, Byte buffer[]) {
     }
 }
 
-// 传值方法
 -(void)settimeStamp:(sentValue)_sentBlock {
     _sentBlock([NSString stringWithFormat:@"%@%f",@"MaxDt :",data]);
 }
 
 -(void)Reset:(float)m {
-    // NSLog(@"reset %f",MaxDt);
     MaxDt = m;
 }
 

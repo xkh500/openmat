@@ -31,19 +31,19 @@
 
 #import <Foundation/Foundation.h>
 
-// expected a type
+#import "LpmsBData.h"
+
 @class CBPeripheral;
 @class CBCentralManager;
 
 typedef void (^sentValue)(NSString *str);
 
-// 声明,类无法直接使用 NSThread
 @interface LpmsB2 : NSObject {
-    // 属性,放在这里会reset 
 }
 
 -(void)parse:(NSData *)data;
--(id)getLpmsBData;
+-(LpmsBData*)getLpmsBData;
+-(int)hasNewData;
 -(void)settimeStamp:(sentValue)_sentBlock;
 -(void)Reset:(float)m;
 -(BOOL)connect:(CBCentralManager*)central Address:(CBPeripheral*)address;
